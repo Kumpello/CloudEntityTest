@@ -25,8 +25,7 @@ public class FirefoxTest {
         WebDriver driver = new FirefoxDriver();
         String correctTitle = "Cloudentity | Dynamic Authorization for Modern Apps";
         driver.get(baseUrl);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(webDriver -> "complete".equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
+        waitForPageToLoad(driver, 15);
         Assertions.assertEquals(correctTitle, driver.getTitle());
         driver.close();
     }
@@ -43,8 +42,7 @@ public class FirefoxTest {
         passwordElement.sendKeys(password);
         WebElement submitButton = driver.findElement(By.className("confirm-button"));
         submitButton.click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(webDriver -> "complete".equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
+        waitForPageToLoad(driver, 15);
         WebElement error = driver.findElement(By.className("error"));
 
         Assertions.assertEquals(error.getText(), "Invalid credentials.");
@@ -56,14 +54,18 @@ public class FirefoxTest {
         String whyCloudEntityTitle = "Dynamic Authorization, API Access and Data Security | Cloudentity";
         WebDriver driver = new FirefoxDriver();
         driver.get(baseUrl);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(webDriver -> "complete".equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
+        waitForPageToLoad(driver, 15);
         WebElement menuLink = driver.findElement(By.id("menu-item-8844"));
         menuLink.click();
-        wait.until(webDriver -> "complete".equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
+        waitForPageToLoad(driver, 15);
 
         Assertions.assertEquals(whyCloudEntityTitle, driver.getTitle());
         driver.close();
+    }
+
+    private void waitForPageToLoad(WebDriver driver, int waitTime) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(waitTime));
+        wait.until(webDriver -> "complete".equals(((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
     }
 
     private String generateRandomCharacters() {
